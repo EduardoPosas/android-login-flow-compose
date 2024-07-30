@@ -1,0 +1,27 @@
+package com.example.loginflowapp
+
+import android.os.Bundle
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.Surface
+import androidx.compose.ui.Modifier
+import com.example.loginflowapp.auth.presentation.signup.SignupScreen
+import com.example.loginflowapp.ui.theme.LoginFlowAppTheme
+import dagger.hilt.android.AndroidEntryPoint
+
+@AndroidEntryPoint
+class MainActivity : ComponentActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
+        setContent {
+            LoginFlowAppTheme {
+                Surface(modifier = Modifier.fillMaxSize()) {
+                    SignupScreen()
+                }
+            }
+        }
+    }
+}
