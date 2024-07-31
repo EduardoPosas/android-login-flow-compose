@@ -53,7 +53,7 @@ fun FormEmailTextField(
         keyboardOptions = KeyboardOptions(
             keyboardType = KeyboardType.Email,
             imeAction = ImeAction.Next
-        )
+        ),
     )
 
 }

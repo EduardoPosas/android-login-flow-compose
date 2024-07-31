@@ -31,7 +31,8 @@ import com.example.loginflowapp.ui.theme.LoginFlowAppTheme
 
 @Composable
 fun LoginScreen(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onNavigateToSignup: () -> Unit = {}
 ) {
 
     val loginViewModel: LoginViewModel = hiltViewModel()
@@ -40,7 +41,7 @@ fun LoginScreen(
     Column(
         modifier = modifier
             .fillMaxSize()
-            .padding(16.dp),
+            .padding(24.dp),
     ) {
         FormBodyText(text = "Login")
         FormHeadingText(text = "Welcome Back")
@@ -80,7 +81,9 @@ fun LoginScreen(
             noClickableText = "Don't you have an account yet?",
             clickableText = "Register",
             modifier = Modifier.align(Alignment.CenterHorizontally)
-        ) {}
+        ) {
+            onNavigateToSignup()
+        }
     }
 }
 
