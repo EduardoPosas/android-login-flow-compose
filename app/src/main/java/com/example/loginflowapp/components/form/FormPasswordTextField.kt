@@ -26,11 +26,14 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
+import com.example.loginflowapp.auth.domain.UiText
 
 @Composable
 fun FormPasswordTextField(
     label: String,
     value: String,
+    isError: Boolean,
+    errorText: UiText?,
     modifier: Modifier = Modifier,
     onValueChange: (String) -> Unit
 ) {
@@ -75,6 +78,8 @@ fun FormPasswordTextField(
             focusedContainerColor = MaterialTheme.colorScheme.secondaryContainer,
             focusedTextColor = MaterialTheme.colorScheme.onSecondaryContainer
         ),
+        isError = isError,
+        supportingText = { if (isError) Text(text = errorText!!.asString()) },
         keyboardOptions = KeyboardOptions(
             keyboardType = KeyboardType.Password,
             imeAction = ImeAction.Done

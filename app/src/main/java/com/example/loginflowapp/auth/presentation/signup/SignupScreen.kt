@@ -1,5 +1,6 @@
 package com.example.loginflowapp.auth.presentation.signup
 
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -38,6 +39,7 @@ fun SignupScreen(
 
     val signupViewModel: SignUpViewModel = hiltViewModel()
     val signupUiState by signupViewModel.signupUiState.collectAsStateWithLifecycle()
+    Log.d("SIGNUP_VALIDATION", signupUiState.toString())
 
     Column(
         modifier = modifier
@@ -47,19 +49,38 @@ fun SignupScreen(
         FormBodyText(text = "Hey there,")
         FormHeadingText(text = "Create an Account")
         Spacer(modifier = Modifier.height(48.dp))
-        FormTextField(label = "First Name", value = signupUiState.firstName) {
+        FormTextField(
+            label = "First Name", value = signupUiState.firstName,
+            isError = signupUiState.errors["firstName"] != null,
+            errorText = signupUiState.errors["firstName"]
+        ) {
             signupViewModel.update(signupUiState.copy(firstName = it))
         }
         Spacer(modifier = Modifier.height(8.dp))
-        FormTextField(label = "Last Name", value = signupUiState.lastName) {
+        FormTextField(
+            label = "Last Name", value = signupUiState.lastName,
+            isError = signupUiState.errors["lastName"] != null,
+            errorText = signupUiState.errors["lastName"]
+        ) {
             signupViewModel.update(signupUiState.copy(lastName = it))
         }
         Spacer(modifier = Modifier.height(8.dp))
-        FormEmailTextField(label = "Email", value = signupUiState.email) {
+        FormEmailTextField(
+            label = "Email",
+            value = signupUiState.email,
+            isError = signupUiState.errors["email"] != null,
+            errorText = signupUiState.errors["email"]
+        )
+        {
             signupViewModel.update(signupUiState.copy(email = it))
         }
         Spacer(modifier = Modifier.height(8.dp))
-        FormPasswordTextField(label = "Password", value = signupUiState.password) {
+        FormPasswordTextField(
+            label = "Password",
+            value = signupUiState.password,
+            isError = signupUiState.errors["password"] != null,
+            errorText = signupUiState.errors["password"]
+        ) {
             signupViewModel.update(signupUiState.copy(password = it))
         }
         Spacer(modifier = Modifier.height(16.dp))

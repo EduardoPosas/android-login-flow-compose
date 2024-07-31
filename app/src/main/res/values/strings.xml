@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">LoginFlowApp</string>
+    <string name="email_cannot_be_blank">Email cannot be blank</string>
+    <string name="invalid_email">Invalid Email</string>
+    <string name="must_be_at_least_8_characteres">Must be at least 8 characteres</string>
+    <string name="must_contait_at_least_1_character_and_1_letter">Must contait at least 1 character and 1 letter</string>
+    <string name="password_cannot_be_blank">Password cannot be blank</string>
+    <string name="required_field">Required Field</string>
+    <string name="must_be_at_least_4_characteres">Must be at least 4 characteres</string>
 </resources>

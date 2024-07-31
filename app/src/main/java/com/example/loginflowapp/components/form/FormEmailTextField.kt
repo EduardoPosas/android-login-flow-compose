@@ -15,11 +15,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
+import com.example.loginflowapp.auth.domain.UiText
 
 @Composable
 fun FormEmailTextField(
     label: String,
     value: String,
+    isError: Boolean,
+    errorText: UiText?,
     modifier: Modifier = Modifier,
     onValueChange: (String) -> Unit
 ) {
@@ -50,6 +53,8 @@ fun FormEmailTextField(
             focusedContainerColor = MaterialTheme.colorScheme.secondaryContainer,
             focusedTextColor = MaterialTheme.colorScheme.onSecondaryContainer
         ),
+        supportingText = { if (isError) Text(text = errorText!!.asString()) },
+        isError = isError,
         keyboardOptions = KeyboardOptions(
             keyboardType = KeyboardType.Email,
             imeAction = ImeAction.Next

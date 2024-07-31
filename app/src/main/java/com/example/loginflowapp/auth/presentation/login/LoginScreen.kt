@@ -1,5 +1,6 @@
 package com.example.loginflowapp.auth.presentation.login
 
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -37,7 +38,7 @@ fun LoginScreen(
 
     val loginViewModel: LoginViewModel = hiltViewModel()
     val loginUiState by loginViewModel.loginUiState.collectAsStateWithLifecycle()
-
+    Log.d("INPUT_VALIDATION", loginUiState.toString())
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -46,11 +47,21 @@ fun LoginScreen(
         FormBodyText(text = "Login")
         FormHeadingText(text = "Welcome Back")
         Spacer(modifier = Modifier.height(48.dp))
-        FormEmailTextField(label = "Email", value = loginUiState.email) {
+        FormEmailTextField(
+            label = "Email",
+            value = loginUiState.email,
+            isError = loginUiState.errors["email"] != null,
+            errorText = loginUiState.errors["email"]
+        ) {
             loginViewModel.update(loginUiState.copy(email = it))
         }
         Spacer(modifier = Modifier.height(8.dp))
-        FormPasswordTextField(label = "Password", value = loginUiState.password) {
+        FormPasswordTextField(
+            label = "Password",
+            value = loginUiState.password,
+            isError = loginUiState.errors["password"] != null,
+            errorText = loginUiState.errors["password"]
+        ) {
             loginViewModel.update(loginUiState.copy(password = it))
         }
         Spacer(modifier = Modifier.height(24.dp))

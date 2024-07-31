@@ -15,11 +15,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
+import com.example.loginflowapp.auth.domain.UiText
 
 @Composable
 fun FormTextField(
     label: String,
     value: String,
+    isError: Boolean,
+    errorText: UiText?,
     modifier: Modifier = Modifier,
     onValueChange: (String) -> Unit
 ) {
@@ -39,6 +42,10 @@ fun FormTextField(
                 contentDescription = null
             )
         },
+        supportingText = {
+            if (isError) Text(text = errorText!!.asString())
+        },
+        isError = isError,
         singleLine = true,
         shape = ShapeDefaults.Medium,
         colors = TextFieldDefaults.colors(
