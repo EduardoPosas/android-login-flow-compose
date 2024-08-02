@@ -54,7 +54,8 @@ fun SignupScreen(
             isError = signupUiState.errors["firstName"] != null,
             errorText = signupUiState.errors["firstName"]
         ) {
-            signupViewModel.update(signupUiState.copy(firstName = it))
+//            signupViewModel.update(signupUiState.copy(firstName = it))
+            signupViewModel.onEvent(SignupUiEvent.FirstNameChanged(it))
         }
         Spacer(modifier = Modifier.height(8.dp))
         FormTextField(
@@ -62,7 +63,8 @@ fun SignupScreen(
             isError = signupUiState.errors["lastName"] != null,
             errorText = signupUiState.errors["lastName"]
         ) {
-            signupViewModel.update(signupUiState.copy(lastName = it))
+//            signupViewModel.update(signupUiState.copy(lastName = it))
+            signupViewModel.onEvent(SignupUiEvent.LastNameChanged(it))
         }
         Spacer(modifier = Modifier.height(8.dp))
         FormEmailTextField(
@@ -72,7 +74,8 @@ fun SignupScreen(
             errorText = signupUiState.errors["email"]
         )
         {
-            signupViewModel.update(signupUiState.copy(email = it))
+//            signupViewModel.update(signupUiState.copy(email = it))
+            signupViewModel.onEvent(SignupUiEvent.EmailChanged(it))
         }
         Spacer(modifier = Modifier.height(8.dp))
         FormPasswordTextField(
@@ -81,7 +84,8 @@ fun SignupScreen(
             isError = signupUiState.errors["password"] != null,
             errorText = signupUiState.errors["password"]
         ) {
-            signupViewModel.update(signupUiState.copy(password = it))
+//            signupViewModel.update(signupUiState.copy(password = it))
+            signupViewModel.onEvent(SignupUiEvent.PasswordChanged(it))
         }
         Spacer(modifier = Modifier.height(16.dp))
         FormConditionsCheckbox(

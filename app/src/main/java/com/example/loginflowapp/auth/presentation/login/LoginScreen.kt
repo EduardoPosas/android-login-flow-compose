@@ -53,7 +53,8 @@ fun LoginScreen(
             isError = loginUiState.errors["email"] != null,
             errorText = loginUiState.errors["email"]
         ) {
-            loginViewModel.update(loginUiState.copy(email = it))
+//            loginViewModel.update(loginUiState.copy(email = it))
+            loginViewModel.onEvent(LoginUiEvent.EmailChanged(it))
         }
         Spacer(modifier = Modifier.height(8.dp))
         FormPasswordTextField(
@@ -62,7 +63,8 @@ fun LoginScreen(
             isError = loginUiState.errors["password"] != null,
             errorText = loginUiState.errors["password"]
         ) {
-            loginViewModel.update(loginUiState.copy(password = it))
+//            loginViewModel.update(loginUiState.copy(password = it))
+            loginViewModel.onEvent(LoginUiEvent.PasswordChanged(it))
         }
         Spacer(modifier = Modifier.height(24.dp))
         UnderlinedSmallText(

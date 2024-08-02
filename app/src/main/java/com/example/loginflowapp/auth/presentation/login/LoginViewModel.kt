@@ -26,9 +26,19 @@ class LoginViewModel @Inject constructor(
         validatePassword()
     }
 
-    fun submitSignInForm() {
-        if(validateEmail() && validatePassword()) {
+    fun onEvent(event: LoginUiEvent) {
+        when (event) {
+            is LoginUiEvent.EmailChanged -> {
+                _loginUiState.value = _loginUiState.value.copy(email = event.email)
+                validateEmail()
+            }
 
+            is LoginUiEvent.PasswordChanged -> {
+                _loginUiState.value = _loginUiState.value.copy(password = event.password)
+                validatePassword()
+            }
+
+            LoginUiEvent.FormSubmit -> TODO()
         }
     }
 

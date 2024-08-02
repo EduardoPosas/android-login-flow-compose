@@ -30,9 +30,29 @@ class SignUpViewModel @Inject constructor(
         validatePassword()
     }
 
-    fun submitSignUpForm() {
-        if (validateFirstName() && validateLastName() && validateEmail() && validatePassword()) {
+    fun onEvent(event: SignupUiEvent) {
+        when (event) {
+            is SignupUiEvent.FirstNameChanged -> {
+                _signupUiState.value = _signupUiState.value.copy(firstName = event.firstName)
+                validateText("firstName", _signupUiState.value.firstName)
+            }
 
+            is SignupUiEvent.LastNameChanged -> {
+                _signupUiState.value = _signupUiState.value.copy(lastName = event.lastName)
+                validateText(field = "lastName", value = _signupUiState.value.lastName)
+            }
+
+            is SignupUiEvent.EmailChanged -> {
+                _signupUiState.value = _signupUiState.value.copy(email = event.email)
+                validateEmail()
+            }
+
+            is SignupUiEvent.PasswordChanged -> {
+                _signupUiState.value = _signupUiState.value.copy(password = event.password)
+                validatePassword()
+            }
+
+            SignupUiEvent.SignupSubmit -> TODO()
         }
     }
 
@@ -48,6 +68,13 @@ class SignUpViewModel @Inject constructor(
         errors["lastName"] = lastNameResult.errorMessage
         _signupUiState.value = _signupUiState.value.copy(errors = errors)
         return lastNameResult.success
+    }
+
+    private fun validateText(field: String, value: String): Boolean {
+        val textResult = validateTextUseCase.execute(value)
+        errors[field] = textResult.errorMessage
+        _signupUiState.value = _signupUiState.value.copy(errors = errors)
+        return textResult.success
     }
 
     private fun validateEmail(): Boolean {
