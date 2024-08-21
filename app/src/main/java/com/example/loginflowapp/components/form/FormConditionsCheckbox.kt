@@ -2,11 +2,14 @@ package com.example.loginflowapp.components.form
 
 import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -16,11 +19,14 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.loginflowapp.auth.domain.UiText
 
 @Composable
 fun FormConditionsCheckbox(
     checked: Boolean,
     onCheckedChange: (Boolean) -> Unit,
+    isError: Boolean,
+    errorText: UiText?,
     modifier: Modifier = Modifier,
     onPrivacyClicked: () -> Unit,
     onTermsClicked: () -> Unit
@@ -65,24 +71,38 @@ fun FormConditionsCheckbox(
         }
     }
 
-    Row(
+    Column(
         modifier = modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.spacedBy(8.dp),
-        verticalAlignment = Alignment.CenterVertically
+        verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        Checkbox(checked = checked, onCheckedChange = { onCheckedChange(it) })
-        ClickableText(text = clickableText) { chrOffset ->
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Checkbox(checked = checked, onCheckedChange = { onCheckedChange(it) })
+            ClickableText(text = clickableText) { chrOffset ->
 //                Log.d("CLICKABLE", "$offset -th character is clicked.")
-            clickableText.getStringAnnotations(chrOffset, chrOffset)
-                .firstOrNull()?.tag?.let { tag ->
-                    Log.d("CLICKABLE", "Tag: $tag was clicked")
-                    if (tag == "privacy") {
-                        onPrivacyClicked()
+                clickableText.getStringAnnotations(chrOffset, chrOffset)
+                    .firstOrNull()?.tag?.let { tag ->
+                        Log.d("CLICKABLE", "Tag: $tag was clicked")
+                        if (tag == "privacy") {
+                            onPrivacyClicked()
+                        }
+                        if (tag == "terms") {
+                            onTermsClicked()
+                        }
                     }
-                    if (tag == "terms") {
-                        onTermsClicked()
-                    }
-                }
+            }
+        }
+        if (isError) {
+            Text(
+                text = errorText!!.asString(),
+                style = MaterialTheme.typography.labelMedium,
+                color = MaterialTheme.colorScheme.error,
+                modifier = Modifier.padding(horizontal = 18.dp),
+            )
         }
     }
+
 }

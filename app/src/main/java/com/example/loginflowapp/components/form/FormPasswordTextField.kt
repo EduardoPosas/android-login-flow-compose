@@ -39,7 +39,7 @@ fun FormPasswordTextField(
 ) {
 
     var passwordHidden by rememberSaveable {
-        mutableStateOf(false)
+        mutableStateOf(true)
     }
     val focusManager = LocalFocusManager.current
 

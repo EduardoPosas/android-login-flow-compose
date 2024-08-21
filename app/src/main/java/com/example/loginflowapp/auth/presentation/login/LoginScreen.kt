@@ -11,9 +11,11 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -33,12 +35,37 @@ import com.example.loginflowapp.ui.theme.LoginFlowAppTheme
 @Composable
 fun LoginScreen(
     modifier: Modifier = Modifier,
-    onNavigateToSignup: () -> Unit = {}
+    onNavigateToSignup: () -> Unit = {},
+    onNavigateToHome: () -> Unit = {}
 ) {
-
     val loginViewModel: LoginViewModel = hiltViewModel()
     val loginUiState by loginViewModel.loginUiState.collectAsStateWithLifecycle()
-    Log.d("INPUT_VALIDATION", loginUiState.toString())
+//    val authState by loginViewModel.authState.collectAsStateWithLifecycle()
+
+    Log.d("AUTH", loginUiState.toString())
+    val context = LocalContext.current
+
+    LaunchedEffect(loginUiState.authenticated.isAuthenticated) {
+        loginViewModel.checkToken()
+        if (loginUiState.authenticated.isAuthenticated) {
+            onNavigateToHome()
+        }
+    }
+
+    SignInForm(
+        loginViewModel = loginViewModel,
+        loginUiState = loginUiState,
+        onNavigateToSignup = onNavigateToSignup
+    )
+}
+
+@Composable
+fun SignInForm(
+    loginViewModel: LoginViewModel,
+    loginUiState: LoginUiState,
+    modifier: Modifier = Modifier,
+    onNavigateToSignup: () -> Unit = {},
+) {
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -53,7 +80,6 @@ fun LoginScreen(
             isError = loginUiState.errors["email"] != null,
             errorText = loginUiState.errors["email"]
         ) {
-//            loginViewModel.update(loginUiState.copy(email = it))
             loginViewModel.onEvent(LoginUiEvent.EmailChanged(it))
         }
         Spacer(modifier = Modifier.height(8.dp))
@@ -63,7 +89,6 @@ fun LoginScreen(
             isError = loginUiState.errors["password"] != null,
             errorText = loginUiState.errors["password"]
         ) {
-//            loginViewModel.update(loginUiState.copy(password = it))
             loginViewModel.onEvent(LoginUiEvent.PasswordChanged(it))
         }
         Spacer(modifier = Modifier.height(24.dp))
@@ -72,7 +97,11 @@ fun LoginScreen(
             modifier.align(Alignment.CenterHorizontally)
         )
         Spacer(modifier = Modifier.height(48.dp))
-        FormPrimaryButton(buttonText = "Login")
+        FormPrimaryButton(buttonText = "Login") {
+            loginViewModel.onEvent(
+                LoginUiEvent.FormSubmit(loginUiState.toSignInDto())
+            )
+        }
         Spacer(modifier = Modifier.height(32.dp))
         FormHorizontalOrDivider()
         Spacer(modifier = Modifier.height(32.dp))

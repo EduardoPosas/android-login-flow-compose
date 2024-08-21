@@ -1,0 +1,10 @@
+syntax = "proto3";
+
+// java_package defines the directory in which we will put our serializer
+option java_package = "com.example.loginflowapp.datastore";
+option java_multiple_files = true;
+
+message UserPreferences {
+  string access_token = 1;
+}
+

@@ -6,3 +6,7 @@ sealed class LoginRouter(val route: String) {
     data object Privacy : LoginRouter("privacy")
     data object TermOfUse : LoginRouter("terms")
 }
+
+sealed class AppRouter(val route: String) {
+    data object Home : AppRouter(route = "home")
+}

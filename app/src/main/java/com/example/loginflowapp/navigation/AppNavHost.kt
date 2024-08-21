@@ -14,5 +14,8 @@ fun AppNavHost(
         navigation(route = "login_graph", startDestination = LoginRouter.Login.route) {
             loginFlow(navController = navController)
         }
+        navigation(route = "app_graph", startDestination = AppRouter.Home.route) {
+            appFlow(navController = navController)
+        }
     }
 }

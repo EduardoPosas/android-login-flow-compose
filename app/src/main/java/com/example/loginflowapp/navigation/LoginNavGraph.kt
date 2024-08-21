@@ -10,9 +10,16 @@ fun NavGraphBuilder.loginFlow(
     navController: NavHostController
 ) {
     composable(LoginRouter.Login.route) {
-        LoginScreen() {
-            navController.navigate(LoginRouter.Register.route)
-        }
+        LoginScreen(
+            onNavigateToSignup = { navController.navigate(LoginRouter.Register.route) },
+            onNavigateToHome = {
+                navController.navigate("app_graph") {
+                    popUpTo(route = LoginRouter.Login.route) {
+                        inclusive = true
+                    }
+                }
+            }
+        )
     }
     composable(route = LoginRouter.Register.route) {
         SignupScreen() {

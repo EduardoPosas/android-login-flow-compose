@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.jetbrains.kotlin.android)
     id("kotlin-kapt")
     id("com.google.dagger.hilt.android")
+    id("com.google.protobuf")
 }
 
 android {
@@ -73,15 +74,43 @@ dependencies {
     implementation(libs.androidx.material.icons.extended)
 
     // Hilt
-    implementation (libs.hilt.android)
+    implementation(libs.hilt.android)
     kapt(libs.hilt.compiler)
     kapt(libs.androidx.hilt.compiler)
     implementation(libs.androidx.hilt.navigation.compose)
 
     // Collect StateFlow with collectAsStateWithLifecycle
     implementation(libs.androidx.lifecycle.runtime.compose)
+
+    // Retrofit
+    implementation(libs.retrofit)
+    implementation(libs.converter.moshi)
+    implementation(libs.okhttp)
+    implementation(libs.logging.interceptor)
+
+    // Proto datastore and protobuf
+    implementation(libs.androidx.datastore)
+    implementation(libs.protobuf.javalite)
+
 }
 
 kapt {
     correctErrorTypes = true
+}
+
+// Protobuf configuration
+protobuf {
+    protoc {
+        artifact = "com.google.protobuf:protoc:3.21.7"
+    }
+
+    generateProtoTasks {
+        all().forEach { task ->
+            task.plugins {
+                create("java") {
+                    option("lite")
+                }
+            }
+        }
+    }
 }

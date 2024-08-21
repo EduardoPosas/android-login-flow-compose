@@ -7,4 +7,5 @@
     <string name="password_cannot_be_blank">Password cannot be blank</string>
     <string name="required_field">Required Field</string>
     <string name="must_be_at_least_4_characteres">Must be at least 4 characteres</string>
+    <string name="must_accept_term_of_use">Must accept term of use</string>
 </resources>
