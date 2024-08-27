@@ -1,7 +1,7 @@
 package com.example.loginflowapp.auth.presentation.login
 
 import com.example.loginflowapp.auth.domain.UiText
-import com.example.loginflowapp.auth.domain.dto.SignInDto
+import com.example.loginflowapp.auth.domain.model.SignIn
 
 data class LoginUiState(
     val email: String = "",
@@ -17,7 +17,7 @@ data class Authenticated(
     val loading: Boolean = false,
 )
 
-fun LoginUiState.toSignInDto() = SignInDto(
+fun LoginUiState.toSignIn() = SignIn(
     email = email,
     password = password
 )

@@ -1,6 +1,6 @@
-package com.example.loginflowapp.auth.domain.dto
+package com.example.loginflowapp.auth.domain.model
 
-data class SignUpDto(
+data class SignUp(
     val firstName: String,
     val lastName: String,
     val email: String,

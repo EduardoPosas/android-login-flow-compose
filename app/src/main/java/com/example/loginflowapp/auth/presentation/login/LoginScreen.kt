@@ -1,6 +1,7 @@
 package com.example.loginflowapp.auth.presentation.login
 
 import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -32,6 +33,8 @@ import com.example.loginflowapp.components.form.FormPrimaryButton
 import com.example.loginflowapp.components.text.UnderlinedSmallText
 import com.example.loginflowapp.ui.theme.LoginFlowAppTheme
 
+const val LOGIN_TAG = "LOGIN"
+
 @Composable
 fun LoginScreen(
     modifier: Modifier = Modifier,
@@ -40,14 +43,18 @@ fun LoginScreen(
 ) {
     val loginViewModel: LoginViewModel = hiltViewModel()
     val loginUiState by loginViewModel.loginUiState.collectAsStateWithLifecycle()
-//    val authState by loginViewModel.authState.collectAsStateWithLifecycle()
-
-    Log.d("AUTH", loginUiState.toString())
+    Log.d(LOGIN_TAG, loginUiState.toString())
     val context = LocalContext.current
 
-    LaunchedEffect(loginUiState.authenticated.isAuthenticated) {
-        loginViewModel.checkToken()
-        if (loginUiState.authenticated.isAuthenticated) {
+    LaunchedEffect(loginUiState.authenticated.isAuthenticated, loginUiState.authenticated.error) {
+        if(loginUiState.authenticated.error) {
+            Toast.makeText(
+                context,
+                loginUiState.authenticated.message,
+                Toast.LENGTH_LONG
+            ).show()
+        }
+        if (loginUiState.authenticated.isAuthenticated && !loginUiState.authenticated.error) {
             onNavigateToHome()
         }
     }
@@ -55,6 +62,7 @@ fun LoginScreen(
     SignInForm(
         loginViewModel = loginViewModel,
         loginUiState = loginUiState,
+        modifier = modifier,
         onNavigateToSignup = onNavigateToSignup
     )
 }
@@ -99,7 +107,7 @@ fun SignInForm(
         Spacer(modifier = Modifier.height(48.dp))
         FormPrimaryButton(buttonText = "Login") {
             loginViewModel.onEvent(
-                LoginUiEvent.FormSubmit(loginUiState.toSignInDto())
+                LoginUiEvent.FormSubmit(loginUiState.toSignIn())
             )
         }
         Spacer(modifier = Modifier.height(32.dp))

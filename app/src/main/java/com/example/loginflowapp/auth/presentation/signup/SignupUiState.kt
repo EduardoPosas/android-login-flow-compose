@@ -1,7 +1,7 @@
 package com.example.loginflowapp.auth.presentation.signup
 
 import com.example.loginflowapp.auth.domain.UiText
-import com.example.loginflowapp.auth.domain.dto.SignUpDto
+import com.example.loginflowapp.auth.domain.model.SignUp
 
 data class SignupUiState(
     val firstName: String = "",
@@ -19,7 +19,7 @@ data class Response(
     val loading: Boolean = false
 )
 
-fun SignupUiState.toSignUpDto() = SignUpDto(
+fun SignupUiState.toSignUpDto() = SignUp(
     firstName = firstName,
     lastName = lastName,
     email = email,
