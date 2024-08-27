@@ -10,10 +10,8 @@ import com.example.loginflowapp.datastore.domain.UserPreferencesRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.isActive
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
-import kotlin.coroutines.CoroutineContext
 
 class AuthRepositoryImpl @Inject constructor(
     private val authServiceApi: AuthServiceApi,

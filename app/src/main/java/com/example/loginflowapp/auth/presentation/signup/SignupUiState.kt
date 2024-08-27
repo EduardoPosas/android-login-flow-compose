@@ -16,10 +16,11 @@ data class SignupUiState(
 data class Response(
     val error: Boolean = false,
     val message: String = "",
-    val loading: Boolean = false
+    val loading: Boolean = false,
+    val success: Boolean = false
 )
 
-fun SignupUiState.toSignUpDto() = SignUp(
+fun SignupUiState.toSignUp() = SignUp(
     firstName = firstName,
     lastName = lastName,
     email = email,

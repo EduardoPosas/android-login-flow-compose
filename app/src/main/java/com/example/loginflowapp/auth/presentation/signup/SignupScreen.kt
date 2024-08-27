@@ -45,27 +45,24 @@ fun SignupScreen(
     val signupViewModel: SignUpViewModel = hiltViewModel()
     val signupUiState by signupViewModel.signupUiState.collectAsStateWithLifecycle()
     val context = LocalContext.current
-    Log.d("SIGNUP_VALIDATION", signupUiState.toString())
+    Log.d("SIGNUP", signupUiState.toString())
 
-    LaunchedEffect(key1 = signupUiState.response.error) {
-        if (signupUiState.response.error && signupUiState.response.message.isNotBlank()) {
+    LaunchedEffect(signupUiState.response.error, signupUiState.response.success) {
+        if (!signupUiState.response.error && signupUiState.response.success) {
+            Toast.makeText(
+                context,
+                signupUiState.response.message,
+                Toast.LENGTH_LONG
+            ).show()
+            onNavigateToLogin()
+        }
+        if (signupUiState.response.error && !signupUiState.response.success) {
             Toast.makeText(
                 context,
                 signupUiState.response.message,
                 Toast.LENGTH_LONG
             ).show()
         }
-    }
-
-    if (!signupUiState.response.error && signupUiState.response.message.isNotBlank()) {
-        // navigate to login
-        Toast.makeText(
-            context,
-            signupUiState.response.message,
-            Toast.LENGTH_LONG
-        ).show()
-        onNavigateToLogin()
-        signupViewModel.resetSignUpState()
     }
 
     Column(
@@ -129,7 +126,7 @@ fun SignupScreen(
         )
         Spacer(modifier = Modifier.height(48.dp))
         FormPrimaryButton(buttonText = "Register") {
-            signupViewModel.onEvent(SignupUiEvent.SignupSubmit(signupUiState.toSignUpDto()))
+            signupViewModel.onEvent(SignupUiEvent.SignupSubmit(signupUiState.toSignUp()))
         }
         Spacer(modifier = Modifier.height(32.dp))
         FormHorizontalOrDivider()

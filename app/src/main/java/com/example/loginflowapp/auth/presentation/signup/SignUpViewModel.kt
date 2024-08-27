@@ -13,6 +13,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -28,10 +29,6 @@ class SignUpViewModel @Inject constructor(
     val signupUiState: StateFlow<SignupUiState> = _signupUiState.asStateFlow()
 
     private val errors = mutableMapOf<String, UiText?>()
-
-    fun update(signupState: SignupUiState) {
-        _signupUiState.value = signupState
-    }
 
     fun onEvent(event: SignupUiEvent) {
         when (event) {
@@ -61,66 +58,73 @@ class SignUpViewModel @Inject constructor(
             }
 
             is SignupUiEvent.SignupSubmit -> {
-//                if (
-//                    validateEmail()
-//                    && validatePassword()
-//                    && validateTermOfUse()
-//                    && validateText(
-//                        field = "lastName",
-//                        value = _signupUiState.value.lastName
-//                    )
-//                    && validateText(
-//                        field = "firstName",
-//                        value = _signupUiState.value.firstName
-//                    )
-//                ) {
-////                    viewModelScope.launch {
-////                        authRepository.signUp(event.signUpDto).collect {
-////                            when (it) {
-////                                is AuthState.Authenticated -> {
-////                                    _signupUiState.value = _signupUiState.value.copy(
-////                                        response = _signupUiState.value.response.copy(
-////                                            loading = false,
-////                                            error = it.data.error,
-////                                            message = it.data.message
-////                                        )
-////                                    )
-////                                }
-////
-////                                is AuthState.Error -> {
-////                                    _signupUiState.value = _signupUiState.value.copy(
-////                                        response = _signupUiState.value.response.copy(
-////                                            loading = false,
-////                                            error = true,
-////                                            message = it.error
-////                                        )
-////                                    )
-////                                }
-////
-////                                AuthState.Idle -> {
-////
-////                                }
-////
-////                                AuthState.Loading -> {
-////                                    _signupUiState.value = _signupUiState.value.copy(
-////                                        response = _signupUiState.value.response.copy(
-////                                            loading = true,
-////                                            error = false,
-////                                            message = ""
-////                                        )
-////                                    )
-////                                }
-////
-////                                else -> {
-////
-////                                }
-////                            }
-////                        }
-////                    }
-//                }
-            }
+                if (
+                    validateText(
+                        field = "firstName",
+                        value = _signupUiState.value.firstName
+                    )
+                    && validateText(
+                        field = "lastName",
+                        value = _signupUiState.value.lastName
+                    )
+                    && validateEmail()
+                    && validatePassword()
+                    && validateTermOfUse()
+                ) {
+                    viewModelScope.launch {
+                        authRepository.signUp(event.signUpDto).collect {
+                            when (it) {
+                                is AuthState.Success -> {
+                                    if(!it.data.error) {
+                                        _signupUiState.update { currentState ->
+                                            currentState.copy(
+                                                response = currentState.response.copy(
+                                                    error = it.data.error,
+                                                    message = it.data.message,
+                                                    success = true
+                                                )
+                                            )
+                                        }
+                                    } else {
+                                        _signupUiState.update { currentState ->
+                                            currentState.copy(
+                                                response = currentState.response.copy(
+                                                    error = it.data.error,
+                                                    message = it.data.message,
+                                                    success = false
+                                                )
+                                            )
+                                        }
+                                    }
 
-            else -> {}
+                                }
+
+                                is AuthState.Error -> {
+                                    _signupUiState.update { currentState ->
+                                        currentState.copy(
+                                            response = currentState.response.copy(
+                                                error = true,
+                                                message = it.error,
+                                                success = false
+                                            )
+                                        )
+                                    }
+                                }
+
+                                is AuthState.Loading -> {
+                                    _signupUiState.update { currentState ->
+                                        currentState.copy(
+                                            response = currentState.response.copy(
+                                                loading = it.isLoading
+                                            )
+                                        )
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 
@@ -151,9 +155,4 @@ class SignUpViewModel @Inject constructor(
         _signupUiState.value = _signupUiState.value.copy(errors = errors)
         return termsResult.success
     }
-
-    fun resetSignUpState() {
-        _signupUiState.value = SignupUiState()
-    }
-
 }
